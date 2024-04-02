@@ -41,6 +41,6 @@ public class TemplateMod implements ModInitializer {
 		// Get their username
 		String username = p.getEntityName();
 		// Send them a greeting containing their username
-		p.sendMessage(Text.literal("Hi "+username+"! Nice to see to freaking you."));
+		p.sendMessage(Text.literal("Hi "+username+"! Nice to see to you."));
 	}
 }
