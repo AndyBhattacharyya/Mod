@@ -43,5 +43,6 @@ public class TemplateMod implements ModInitializer {
 		// Send them a greeting containing their username
 		p.sendMessage(Text.literal("Hi "+username+"! Nice to see to you."));
 		p.sendMessage(Text.literal("Fuck you"));
+		p.sendMessage(Text.literal("Sorry for profanity"));
 	}
 }
