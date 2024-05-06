@@ -110,9 +110,6 @@ public class TemplateMod implements ModInitializer {
 			((ZombifiedPiglinEntity) entity).setTarget(world.getClosestPlayer(entity, Double.MAX_VALUE));
 
 		}
-		if (entity instanceof ArrowEntity){
-			entity.setVelocity(entity.getVelocity().multiply(5.0));
-		}
 	}
 	public void onPlayerJoin(
 			ServerPlayNetworkHandler e,
