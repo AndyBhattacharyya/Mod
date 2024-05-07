@@ -18,5 +18,8 @@ public class on_player_join {
         String username = p.getEntityName();
         // Send them a greeting containing their username
         p.sendMessage(Text.literal("Hi "+username+"! Nice to see to you."));
+        // Additional Greeting
+        p.sendMessage(Text.literal("You suck" +username+"! terrible to see to you."));
+
     }
 }
