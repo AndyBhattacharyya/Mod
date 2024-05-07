@@ -20,6 +20,8 @@ public class on_player_join {
         p.sendMessage(Text.literal("Hi "+username+"! Nice to see to you."));
         // Additional Greeting
         p.sendMessage(Text.literal("You suck" +username+"! terrible to see to you."));
+        // 2 noobs
+        p.sendMessage(Text.literal("We suck at minecraft modding"));
 
     }
 }
