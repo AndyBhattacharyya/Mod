@@ -50,21 +50,10 @@ public class TemplateMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		//General Syntax: event.Event.register(class::static_method);
-		ServerPlayConnectionEvents.JOIN.register(this::onPlayerJoin);
+		ServerPlayConnectionEvents.JOIN.register(on_player_join::onPlayerJoin);
 		UseItemCallback.EVENT.register(mobshooting::mob_shooter);
 		ServerEntityEvents.ENTITY_LOAD.register(mobspawning::onmobspawn);
 		LOGGER.info("Hello Fabric world!");
 	}
-	public void onPlayerJoin(
-			ServerPlayNetworkHandler e,
-			PacketSender sender,
-			MinecraftServer srv) {
 
-		// Get the player that triggered this event
-		ServerPlayerEntity p = e.getPlayer();
-		// Get their username
-		String username = p.getEntityName();
-		// Send them a greeting containing their username
-		p.sendMessage(Text.literal("Hi "+username+"! Nice to see to you."));
-	}
 }
