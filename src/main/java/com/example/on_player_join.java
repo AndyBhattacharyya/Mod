@@ -22,6 +22,6 @@ public class on_player_join {
         p.sendMessage(Text.literal("You suck" +username+"! terrible to see to you."));
         // 2 noobs
         p.sendMessage(Text.literal("We suck at minecraft modding"));
-
+        p.sendMessage(Text.literal("But we do be learning <3"));
     }
 }
