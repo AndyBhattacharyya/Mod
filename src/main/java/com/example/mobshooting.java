@@ -33,13 +33,18 @@ public class mobshooting {
             //Spawning a creeper
             CreeperEntity e = new CreeperEntity(EntityType.CREEPER, world);
             //Setting the velocity of the creeper
-            e.setVelocity(player.getRotationVector().multiply(5));
+            //Getting Velocity Vector
+            //Vec3d init_vel = player.getRotationVector().normalize().multiply(INIT_MAGN);
+            //e.setVelocity(init_vel);
             // Setting the Spawn point of the creeper at the players position
             e.setPosition(player.getPos());
             //This method will ignite the creeper
-            e.ignite();
+            //e.ignite();
             // Actually spawning the creeper
             world.spawnEntity(e);
+            player.sendMessage(Text.literal("Yaw:" + player.getYaw()));
+            player.sendMessage(Text.literal("Pitch:" + player.getPitch()));
+
         }
         else if (stack.getItem().equals(item_zombiepigmen)){
             ZombifiedPiglinEntity zombiepigmen = new ZombifiedPiglinEntity(EntityType.ZOMBIFIED_PIGLIN, world);
@@ -58,7 +63,10 @@ public class mobshooting {
         else if (stack.getItem().equals(item_skeleton)){
             SkeletonEntity skele = new SkeletonEntity(EntityType.SKELETON, world);
             skele.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+            skele.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
             skele.setPosition(player.getPos());
+            Vec3d init_vel = player.getRotationVector().normalize().multiply(INIT_MAGN);
+            skele.setVelocity(init_vel);
             world.spawnEntity(skele);
         }
         return TypedActionResult.pass(ItemStack.EMPTY);
