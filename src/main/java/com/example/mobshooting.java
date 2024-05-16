@@ -24,21 +24,32 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.Random;
 
 public class mobshooting {
-
-    /*
-    custom obj = {Entity tmp, int Tick_Wait, int GetTick_wait}
-
-    custom_obj[] data_struc = new int[1];
-     */
     private static final int INIT_MAGN = 4;
+    static <T extends CreeperEntity> T modify(T mob, Vec3d vel, Vec3d pos){
+        mob.setVelocity(vel);
+        mob.setPosition(pos);
+        mob.ignite();
+        return mob;
+    }
+    static <T extends ZombifiedPiglinEntity> T modify(T mob, Vec3d vel, Vec3d pos){
+        mob.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+        StatusEffectInstance speed = new StatusEffectInstance(StatusEffects.SPEED, 1000000, 1);
+        mob.addStatusEffect(speed);
+        mob.setVelocity(vel);
+        mob.setPosition(pos);
+        return mob;
+    }
+    static <T extends SkeletonEntity> T modify(T mob, Vec3d vel, Vec3d pos){
+        mob.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+        mob.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+        mob.setVelocity(vel);
+        mob.setPosition(pos);
+        return mob;
+    }
     public static TypedActionResult<ItemStack> mob_shooter(PlayerEntity player, World world, Hand hand){
         //Getting the item that the player right clicked with
         ItemStack stack = player.getMainHandStack();
         Item PlayerHand = stack.getItem();
-        //Setting items to later compare if player right clicked with this item
-        Item item_creeper = Items.GUNPOWDER;
-        Item item_zombiepigmen = Items.GOLD_INGOT;
-        Item item_skeleton = Items.BONE;
         //Setting projectile speed that mobs will be launched at
         Vec3d init_vel = player.getRotationVector().multiply(INIT_MAGN);
         //Getting player position at the time they right click a particular item. Required for projectile
@@ -53,47 +64,30 @@ public class mobshooting {
             return TypedActionResult.pass(ItemStack.EMPTY);
         }
 
-        //Creeper is spawned immediately since it is ignited
-        if (PlayerHand.equals(item_creeper)) {
-             mob = new CreeperEntity(EntityType.CREEPER, world);
-             ((CreeperEntity) mob).ignite();
-            mob.setVelocity(init_vel);
-            mob.setPosition(play_pos);
-             world.spawnEntity(mob);
+        if(PlayerHand.equals(Items.GUNPOWDER)){
+            mob = modify(new CreeperEntity(EntityType.CREEPER,world),init_vel,play_pos);
+            world.spawnEntity(mob);
+            return TypedActionResult.pass(ItemStack.EMPTY);
         }
-        else{
-            //Checking if they spawned zombiepigmen
-            if (PlayerHand.equals(item_zombiepigmen)){
-                mob = new ZombifiedPiglinEntity(EntityType.ZOMBIFIED_PIGLIN, world);
-                mob.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-                StatusEffectInstance speed = new StatusEffectInstance(StatusEffects.SPEED, 1000000, 1);
-                mob.addStatusEffect(speed);
-                //mobstack.push(new mobspawning(zombiepigmen, spawntick));
-            }
-            //checking if they spawned skeleton
-            else if (stack.getItem().equals(item_skeleton)){
-                mob = new SkeletonEntity(EntityType.SKELETON, world);
-                mob.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-                mob.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
-                //mobstack.push(new mobspawning(skele, spawntick));
-            }
-
-            try {
-                //Setting properties of these mobs when they spawn
-                mob.setVelocity(init_vel);
-                mob.setPosition(play_pos);
-                //Uniquely identifying these mobs so that we can reference them on the world whenever
-                int mob_id = new Random().nextInt(100000);
-                mob.setId(mob_id);
-                //Adding mob onto the stack, where they will provided a target to attack at a given time
-                mobstack.push(new mobspawning(mob, spawntick, mob_id));
-                //Spawning the mob
-                world.spawnEntity(mob);
-            } catch (NullPointerException e){
-                return TypedActionResult.pass(ItemStack.EMPTY);
-
-            }
+        else if(PlayerHand.equals(Items.GOLD_INGOT)){
+            mob = modify(new ZombifiedPiglinEntity(EntityType.ZOMBIFIED_PIGLIN,world),init_vel,play_pos);
+        }
+        else if(PlayerHand.equals(Items.BONE)){
+            mob = modify(new SkeletonEntity(EntityType.SKELETON,world),init_vel,play_pos);
+        }
+        //Ensures that action occurs only when these items are right clicked
+        try {
+            //Uniquely identifying these mobs so that we can reference them on the world whenever
+            int mob_id = new Random().nextInt(100000);
+            mob.setId(mob_id);
+            //Adding mob onto the stack, where they will provided a target to attack at a given time
+            mobstack.push(new mobspawning(mob, spawntick, mob_id));
+            //Spawning the mob
+            world.spawnEntity(mob);
+        } catch (NullPointerException e){
+            return TypedActionResult.pass(ItemStack.EMPTY);
         }
         return TypedActionResult.pass(ItemStack.EMPTY);
+        }
     }
-}
+
